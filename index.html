@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Social Media Profile Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+        }
+        .social-card {
+            transition: transform 0.2s;
+        }
+        .social-card:hover {
+            transform: translateY(-5px);
+        }
+        .android-frame {
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+        }
+        .iphone-frame {
+            border-radius: 24px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            background: #f8f8f8;
+        }
+        .battery-horizontal {
+            width: 40px;
+            height: 20px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            position: relative;
+        }
+        .battery-vertical {
+            width: 20px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            position: relative;
+        }
+        .battery-level {
+            position: absolute;
+            background: #4CAF50;
+            border-radius: 2px;
+        }
+        .dark-theme {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .dark-theme .bg-white {
+            background-color: #1e1e1e !important;
+        }
+        .dark-theme .text-gray-600 {
+            color: #9e9e9e !important;
+        }
+        .dark-theme .border {
+            border-color: #333 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-4xl mx-auto p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">
+                <i class="fas fa-user-astronaut text-blue-500 mr-2"></i> Fake Social Media Profile Generator
+            </h1>
+            <div class="flex space-x-4">
+                <select id="languageSelect" class="px-3 py-1 border rounded-lg">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh">中文</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                </select>
+                <select id="themeSelect" class="px-3 py-1 border rounded-lg">
+                    <option value="default">Default Theme</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="professional">Professional</option>
+                    <option value="vibrant">Vibrant Colors</option>
+                    <option value="pastel">Pastel</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Social Media Selection Menu -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-10">
+            <a href="profile.html" class="social-card bg-gradient-to-br from-pink-500 to-purple-600 text-white rounded-lg p-6 text-center shadow-lg">
+                <i class="fab fa-instagram text-4xl mb-3"></i>
+                <h2 class="text-xl font-bold mb-2">Instagram</h2>
+                <p>Generate fake Instagram profile</p>
+            </a>
+            
+            <a href="twitter.html" class="social-card bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-6 text-center shadow-lg">
+                <i class="fab fa-twitter text-4xl mb-3"></i>
+                <h2 class="text-xl font-bold mb-2">Twitter</h2>
+                <p>Generate fake Twitter profile</p>
+            </a>
+            
+            <a href="facebook.html" class="social-card bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-lg p-6 text-center shadow-lg">
+                <i class="fab fa-facebook text-4xl mb-3"></i>
+                <h2 class="text-xl font-bold mb-2">Facebook</h2>
+                <p>Generate fake Facebook profile</p>
+            </a>
+            
+            <a href="youtube.html" class="social-card bg-gradient-to-br from-red-500 to-red-700 text-white rounded-lg p-6 text-center shadow-lg">
+                <i class="fab fa-youtube text-4xl mb-3"></i>
+                <h2 class="text-xl font-bold mb-2">YouTube</h2>
+                <p>Generate fake YouTube channel</p>
+            </a>
+            
+            <a href="linkedin.html" class="social-card bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-lg p-6 text-center shadow-lg">
+                <i class="fab fa-linkedin text-4xl mb-3"></i>
+                <h2 class="text-xl font-bold mb-2">LinkedIn</h2>
+                <p>Generate professional profile</p>
+            </a>
+        </div>
+
+        <!-- Profile Form -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-center mb-6">
+                    <i class="fas fa-user-edit mr-2"></i> Profile Information
+                </h2>
+                
+                <form id="profileForm" class="space-y-4">
+                    <!-- Device Selection -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Device Type</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" name="device" value="android" checked class="h-4 w-4">
+                                <span>Android</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" name="device" value="iphone" class="h-4 w-4">
+                                <span>iPhone</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Battery Options -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Battery Options</label>
+                        <div class="flex items-center space-x-4">
+                            <input type="range" name="battery" min="0" max="100" value="85" 
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span id="batteryValue" class="text-gray-700">85%</span>
+                        </div>
+                        <div class="flex items-center mt-2 space-x-4">
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="batteryOrientation" value="horizontal" checked class="h-4 w-4">
+                                <span>Horizontal</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="batteryOrientation" value="vertical" class="h-4 w-4">
+                                <span>Vertical</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Network Options -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Network Type</label>
+                        <select name="network" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="5g">5G</option>
+                            <option value="4g">4G</option>
+                            <option value="3g">3G</option>
+                            <option value="2g">2G</option>
+                            <option value="wifi">Wi-Fi</option>
+                        </select>
+                    </div>
+
+                    <!-- Profile Information -->
+                    <div>
+                        <label class="block text-gray-700 mb-2">Username</label>
+                        <input type="text" name="username" required 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <p class="text-red-500 text-sm mt-1 hidden" id="usernameError">Username is required</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" name="fullname" required 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Bio</label>
+                        <textarea name="bio" rows="3" 
+                                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Followers</label>
+                            <input type="number" name="followers" value="1000" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Following</label>
+                            <input type="number" name="following" value="500" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Posts</label>
+                            <input type="number" name="posts" value="50" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div>
+                        <label class="block text-gray-700 mb-2">Profile Image</label>
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*" 
+                               class="w-full px-4 py-2 border rounded-lg">
+                        <div id="imagePreview" class="mt-2 rounded-full mx-auto profile-preview bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-4xl text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Additional Options -->
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="darkTheme" class="h-4 w-4">
+                            <span>Dark Theme</span>
+                        </label>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 mb-1">Verification Level</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="verification" value="none" checked class="h-4 w-4">
+                                <span class="flex items-center">
+                                    <span class="w-5 h-5 bg-gray-300 rounded-full mr-1"></span>
+                                    None
+                                </span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="verification" value="basic" class="h-4 w-4">
+                                <span class="flex items-center">
+                                    <span class="w-5 h-5 bg-blue-500 rounded-full mr-1"></span>
+                                    Basic
+                                </span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="verification" value="premium" class="h-4 w-4">
+                                <span class="flex items-center">
+                                    <span class="w-5 h-5 bg-green-500 rounded-full mr-1"></span>
+                                    Premium
+                                </span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="verification" value="official" class="h-4 w-4">
+                                <span class="flex items-center">
+                                    <span class="w-5 h-5 bg-purple-500 rounded-full mr-1"></span>
+                                    Official
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="professionalAccount" class="h-4 w-4">
+                            <span>Professional Account</span>
+                        </label>
+                        <div id="jobTitleContainer" class="hidden">
+                            <input type="text" name="jobTitle" placeholder="Job Title" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="showFooter" checked class="h-4 w-4">
+                            <span>Show Footer</span>
+                        </label>
+                    </div>
+
+                    <!-- Story Status -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Story Status</label>
+                        <select name="storyStatus" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="seen">Seen</option>
+                            <option value="unseen">Unseen</option>
+                        </select>
+                    </div>
+
+                    <!-- Post Generator -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Sample Posts</label>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="text" placeholder="Post content" class="flex-1 px-4 py-2 border rounded-lg">
+                                <button class="ml-2 bg-gray-200 p-2 rounded-lg hover:bg-gray-300">
+                                    <i class="fas fa-image text-blue-500"></i>
+                                </button>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="button" class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200">Add Post</button>
+                                <button type="button" id="previewPostsBtn" class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200">Preview</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4">
+                        <button type="submit" 
+                </form>
+            </div>
+        </div>
+
+        <!-- QR Code Modal -->
+        <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg max-w-sm w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Profile QR Code</h3>
+                    <button id="closeQRModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="qrCodeContainer" class="flex justify-center mb-4">
+                    <!-- QR code will be inserted here -->
+                </div>
+                <button id="downloadQRBtn" 
+                        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">
+                    <i class="fas fa-download mr-2"></i> Download QR Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Battery percentage display
+        document.querySelector('input[name=battery]').addEventListener('input', function() {
+            document.getElementById('batteryValue').textContent = this.value + '%';
+        });
+
+        // Show/hide job title field
+        document.querySelector('input[name=professionalAccount]').addEventListener('change', function() {
+            document.getElementById('jobTitleContainer').classList.toggle('hidden', !this.checked);
+        });
+
+        // Image preview
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('imagePreview').style.backgroundImage = `url(${event.target.result})`;
+                    document.getElementById('imagePreview').innerHTML = '';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Post Generator Functionality
+        const posts = [];
+        const postInput = document.querySelector('input[placeholder="Post content"]');
+        const addPostBtn = document.querySelector('.bg-blue-100');
+        const previewBtn = document.querySelector('.bg-gray-100');
+        const imageBtn = document.querySelector('.fa-image').parentNode;
+
+        imageBtn.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.click();
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        posts.push({
+                            text: postInput.value,
+                            image: event.target.result
+                        });
+                        postInput.value = '';
+                        alert('Post with image added!');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        });
+
+        addPostBtn.addEventListener('click', function() {
+            if (postInput.value.trim()) {
+                posts.push({
+                    text: postInput.value,
+                    image: null
+                });
+                postInput.value = '';
+                alert('Post added!');
+            }
+        });
+
+        document.getElementById('previewPostsBtn').addEventListener('click', function() {
+            // Create sample posts if none exist
+            const postsToPreview = posts.length > 0 ? posts : [
+                {
+                    text: "Just posted my first photo! #newbeginnings",
+                    image: null,
+                    date: new Date().toISOString(),
+                    likes: Math.floor(Math.random() * 1000),
+                    comments: Math.floor(Math.random() * 100)
+                },
+                {
+                    text: "Enjoying the beautiful weather today ☀️",
+                    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+                    date: new Date().toISOString(),
+                    likes: Math.floor(Math.random() * 5000),
+                    comments: Math.floor(Math.random() * 300)
+                }
+            ];
+            
+            localStorage.setItem('previewPosts', JSON.stringify(postsToPreview));
+            window.open('post-preview.html', '_blank');
+        });
+
+        // Form submission
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const username = formData.get('username');
+            
+            if (!username) {
+                document.getElementById('usernameError').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('usernameError').classList.add('hidden');
+            }
+
+            const profileData = {
+                username: formData.get('username'),
+                fullname: formData.get('fullname'),
+                bio: formData.get('bio'),
+                followers: formData.get('followers'),
+                following: formData.get('following'),
+                posts: formData.get('posts'),
+                profileImage: document.getElementById('imagePreview').style.backgroundImage || '',
+                device: formData.get('device'),
+                battery: formData.get('battery'),
+                batteryOrientation: formData.get('batteryOrientation'),
+                network: formData.get('network'),
+                darkTheme: formData.get('darkTheme') === 'on',
+                verified: formData.get('verified') === 'on',
+                professionalAccount: formData.get('professionalAccount') === 'on',
+                jobTitle: formData.get('jobTitle') || '',
+                showFooter: formData.get('showFooter') === 'on',
+                storyStatus: formData.get('storyStatus')
+            };
+
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+            window.location.href = 'profile.html';
+        });
+    </script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    
+    <script>
+        // QR Code Generation
+        document.getElementById('generateQRBtn').addEventListener('click', function() {
+            const username = document.querySelector('input[name=username]').value;
+            if (!username) {
+                alert('Please enter a username first');
+                return;
+            }
+
+            const qrUrl = `${window.location.origin}/profile.html?user=${encodeURIComponent(username)}`;
+            const qrContainer = document.getElementById('qrCodeContainer');
+            
+            qrContainer.innerHTML = '';
+            QRCode.toCanvas(qrContainer, qrUrl, { width: 200 }, function(error) {
+                if (error) console.error(error);
+            });
+
+            document.getElementById('qrModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeQRModal').addEventListener('click', function() {
+            document.getElementById('qrModal').classList.add('hidden');
+        });
+
+        document.getElementById('downloadQRBtn').addEventListener('click', function() {
+            const canvas = document.querySelector('#qrCodeContainer canvas');
+            const link = document.createElement('a');
+            link.download = 'profile-qrcode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
