@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Profile Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .linkedin-bg {
+            background-color: #f3f6f8;
+        }
+        .linkedin-header {
+            background-color: #0077b5;
+        }
+        .experience-card {
+            border-left: 2px solid #0077b5;
+        }
+    </style>
+</head>
+<body class="linkedin-bg min-h-screen">
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <div class="linkedin-header text-white p-6">
+            <div class="flex items-center">
+                <div class="w-24 h-24 rounded-full border-4 border-white bg-gray-200 mr-6"></div>
+                <div>
+                    <h1 class="text-2xl font-bold" id="linkedinName">Full Name</h1>
+                    <p class="text-lg" id="linkedinTitle">Job Title</p>
+                    <p class="text-sm" id="linkedinLocation">Location</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="p-6">
+            <!-- About Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">About</h2>
+                <p id="linkedinAbout" class="text-gray-600">This is a sample LinkedIn about section.</p>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Experience</h2>
+                <div class="experience-card pl-4 mb-4">
+                    <h3 class="font-bold" id="linkedinCurrentJob">Current Position</h3>
+                    <p class="text-gray-600 text-sm" id="linkedinCurrentCompany">Company Name</p>
+                    <p class="text-gray-500 text-xs">Jan 2020 - Present</p>
+                </div>
+                <div class="experience-card pl-4">
+                    <h3 class="font-bold">Previous Position</h3>
+                    <p class="text-gray-600 text-sm">Previous Company</p>
+                    <p class="text-gray-500 text-xs">Jan 2018 - Dec 2019</p>
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Education</h2>
+                <div class="flex items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-graduation-cap text-blue-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold" id="linkedinEducation">University Name</h3>
+                        <p class="text-gray-600 text-sm">Degree, Field of Study</p>
+                        <p class="text-gray-500 text-xs">2014 - 2018</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 text-center">
+            <a href="index.html" class="text-blue-500 hover:text-blue-700">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Generator
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileData = JSON.parse(localStorage.getItem('profileData')) || {};
+            
+            // Set LinkedIn profile data
+            if (profileData.fullname) {
+                document.getElementById('linkedinName').textContent = profileData.fullname;
+            }
+            if (profileData.jobTitle) {
+                document.getElementById('linkedinTitle').textContent = profileData.jobTitle;
+                document.getElementById('linkedinCurrentJob').textContent = profileData.jobTitle;
+            }
+            if (profileData.bio) {
+                document.getElementById('linkedinAbout').textContent = profileData.bio;
+            }
+            
+            // Generate random LinkedIn stats
+            document.getElementById('linkedinCurrentCompany').textContent = 
+                ["TechCorp", "Digital Solutions", "Innovate Inc", "Global Systems"][Math.floor(Math.random() * 4)];
+            document.getElementById('linkedinEducation').textContent = 
+                ["Harvard University", "Stanford", "MIT", "Oxford"][Math.floor(Math.random() * 4)];
+        });
+    </script>
+</body>
+</html>
